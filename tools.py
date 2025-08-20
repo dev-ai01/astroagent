@@ -1,6 +1,3 @@
-
-import sys
-print("sys exec-->", sys.executable)
 import swisseph as swe
 import datetime, requests, os
 # from openai import OpenAI
@@ -190,5 +187,6 @@ def generate_final_prediction(name, ascendant, moon_sign, asc_text, moon_text):
 
 
 # text = generate_final_prediction(name= "s", ascendant= "libra", moon_sign= "aquarius", asc_text = "u ll have wonderful day", moon_text= "you are goin to be healthy!")
+
 
 # print(text)
