@@ -15,11 +15,14 @@ A FastAPI-based microservice that generates astrological predictions using birth
 
 ## 📦 Installation
 
-1. Download the zip file, Extract and locate in the system
-
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/dev-ai01/astroagent.git
+   cd astroagent
+   
 #### Create a virtual environment (optional but recommended):
 
-python -m venv venv
+python -m venv venv                                                     
 source venv/bin/activate   # On Linux/Mac
 venv\Scripts\activate      # On Windows
 
@@ -51,3 +54,4 @@ Example Output:
 }
 
 ![Response](image.png)
+
