@@ -36,7 +36,7 @@ The API will be available at: http://127.0.0.1:8000/docs
 
 Example Input: 
 
-{"name": "MyNaksh",
+{"name": "si",
    "birth_date": "2001-03-23",
    "birth_time": "21:04",
    "city_name":"delhi"}
@@ -44,9 +44,10 @@ Example Input:
 Example Output:
 	
 {
-  "name": "MyNaksh",
+  "name": "si",
   "ascendant": "Scorpio",
   "moon_sign": "Pisces",
   "prediction": "Today your Scorpio ascendant lights a path of daring transformation—feel confident taking bold steps, especially in work or relationships where change feels overdue. With Pisces ruling your emotions, your intuition is heightened; trust those subtle nudges, especially when making decisions that touch the heart. You may find yourself drawn to creative or artistic pursuits—allow your inner compassion to guide you, and it will bring unexpected joy. Balance your natural intensity with a gentle openness, and the day will unfold with both purpose and peace."
 }
+
 ![Response](image.png)
