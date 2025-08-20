@@ -2,39 +2,10 @@ import swisseph as swe
 import datetime, requests, os
 # from openai import OpenAI
 from groq import Groq
-
+from geopy.geocoders import Nominatim
 from dotenv import load_dotenv, find_dotenv
 
-# this finds .env in your project and loads it
 load_dotenv(find_dotenv())
-# def get_sidereal_positions(birth_date, birth_time, latitude, longitude, tz_offset=5.5):
-#     """
-#     Calculate Moon sign and Ascendant using sidereal zodiac (Lahiri ayanamsa).
-#     """
-#     # Convert datetime
-#     dt = datetime.datetime.strptime(f"{birth_date} {birth_time}", "%Y-%m-%d %H:%M")
-#     jd = swe.julday(dt.year, dt.month, dt.day, dt.hour + dt.minute/60 - tz_offset)
-
-    # # Set Lahiri ayanamsa
-    # swe.set_sid_mode(swe.SIDM_LAHIRI, 0, 0)
-    # # Moon position
-    # moon_calc = swe.calc_ut(jd, swe.MOON)   # returns (longitude, latitude, distance, speed_long, speed_lat, speed_dist)
-    # moon_lon = moon_calc[0][0]              # first element, longitude
-    # moon_sign = int(moon_lon // 30)
-
-    # # Ascendant
-    # houses, ascmc = swe.houses_ex(jd, latitude, longitude, b'A')
-    # asc_lon = ascmc[0]                      # ascendant longitude
-    # asc_sign = int(asc_lon // 30)
-
-    # # Rashi list
-    # rashis = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
-    #           "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
-
-    # return {
-    #     "moon_sign": rashis[moon_sign],
-    #     "ascendant": rashis[asc_sign]
-    # }
 
 from geopy.geocoders import Nominatim
 
@@ -74,7 +45,7 @@ def get_chart_positions(birth_date, birth_time, city_name, tz_offset=5.5):
 
     results = {}
 
-    # 🌙 Moon
+    # Moon
     pos, _ = swe.calc_ut(jd, swe.MOON)
     lon = pos[0]
     sign_index = int(lon // 30)
@@ -82,7 +53,7 @@ def get_chart_positions(birth_date, birth_time, city_name, tz_offset=5.5):
     degree_in_sign = lon % 30
     results["Moon"] = {"longitude": lon, "sign": sign, "degree": round(degree_in_sign, 2)}
 
-    # 🕉 Ascendant (Lagna)
+    # Ascendant (Lagna)
     ascmc = swe.houses_ex(jd, latitude, longitude, b'A')  # Placidus system, can change
     asc_lon = ascmc[0][0]  # first value is Ascendant longitude
     sign_index = int(asc_lon // 30)
@@ -90,7 +61,6 @@ def get_chart_positions(birth_date, birth_time, city_name, tz_offset=5.5):
     degree_in_sign = asc_lon % 30
     results["Ascendant"] = {"longitude": asc_lon, "sign": sign, "degree": round(degree_in_sign, 2)}
 
-    # (Optional) Add planets if needed
     planets = {
         "Sun": swe.SUN,
         "Mars": swe.MARS,
@@ -111,15 +81,6 @@ def get_chart_positions(birth_date, birth_time, city_name, tz_offset=5.5):
 
     return results
 
-# Example call
-# ans1 = get_chart_positions(
-#     birth_date="2001-03-23",
-#     birth_time="21:04",
-#     latitude=26.9124,
-#     longitude=75.7873
-# )
-# print(ans1['Ascendant']['sign'], ans1['Moon'])
-
 
 def fetch_horoscope(sign: str, sign_type: str):
     """
@@ -139,9 +100,6 @@ def fetch_horoscope(sign: str, sign_type: str):
     results = [item["snippet"] for item in data.get("organic", [])[:2]]
     return " ".join(results) if results else f"No horoscope found for {sign_type} {sign}"
 
-# res = fetch_horoscope("Libra", "Ascendant")
-# print("res ", res)
-# # client = OpenAI()
 
 def generate_final_prediction(name, ascendant, moon_sign, asc_text, moon_text):
     """
@@ -164,11 +122,6 @@ def generate_final_prediction(name, ascendant, moon_sign, asc_text, moon_text):
     client = Groq(
         api_key=os.environ.get("GROQ_API_KEY"),)   
 
-    # response = client.chat.completions.create(
-    #     model="gpt-4o-mini",
-    #     messages=[{"role": "user", "content": prompt}],
-    #     temperature=0.7
-    # )
 
     chat_completion = client.chat.completions.create(
     messages=[
@@ -185,8 +138,3 @@ def generate_final_prediction(name, ascendant, moon_sign, asc_text, moon_text):
     return result
 
 
-
-# text = generate_final_prediction(name= "s", ascendant= "libra", moon_sign= "aquarius", asc_text = "u ll have wonderful day", moon_text= "you are goin to be healthy!")
-
-
-# print(text)
